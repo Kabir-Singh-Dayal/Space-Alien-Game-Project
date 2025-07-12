@@ -16,6 +16,11 @@ COLLISION_DISTANCE = 27
 
 # Initialize Pygame
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load('background_music.mp3')
+pygame.mixer.music.play(-1)
+bullet_sound = pygame.mixer.Sound('laser.wav')
+explosion_sound = pygame.mixer.Sound('explosion.wav')
 
 # Create the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -108,6 +113,7 @@ while running:
             if event.key==pygame.K_SPACE and bullet_state=='ready':
                 bulletX=playerX 
                 fire_bullet(bulletX, bulletY)
+                bullet_sound.play()
         if event.type==pygame.KEYUP and event.key in (pygame.K_LEFT, pygame.K_RIGHT):
             playerX_change=0
     playerX+=playerX_change
@@ -123,6 +129,7 @@ while running:
             enemyX_change[i]*=-1
             enemyY[i]+=enemyY_change[i]
         if isCollision(enemyX[i], enemyY[i], bulletX, bulletY):
+            explosion_sound.play()
             bullet_state='ready'
             bulletY=PLAYER_START_Y
             score_value+=1
